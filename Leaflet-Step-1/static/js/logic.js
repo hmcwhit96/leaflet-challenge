@@ -1,16 +1,23 @@
 // define URL for JSON data
-var URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
+var URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
 // create streetmap
 var streetmap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
+var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+});
+// var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+//     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+// });
+var earthquakes = new L.LayerGroup();
 
 
 //create baseMaps and overlay objects
 var baseMaps = {
     "Street Map": street,
-    "Satellite Map": satellite
+    // "Satellite Map": satellite
 };
 
 var overlayMaps = {
@@ -19,8 +26,8 @@ var overlayMaps = {
 
 // create map and add layers
 var myMap = L.map('map', {
-    center: [37.09, -95.71],
-    zoom: 5,
+    center: [49.527696, -117.229213],
+    zoom: 3.5,
     layers: [street, earthquakes]
 
 });
@@ -35,7 +42,7 @@ L.control.layers(baseMaps, overlayMaps, {
 // loop through data to create markers
 var colors = ['purple', 'blue', 'green', 'yellow', 'orange', 'red'];
 
-d3.json(url).then(function(data){
+d3.json(URL).then(function(data){
     console.log(data)
     for (var i = 0; i < data.features.length; i++) {
       coordinates = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]]
@@ -73,8 +80,8 @@ d3.json(url).then(function(data){
         opacity: 0.75,
         color: 'white',
         fillColor: color,
-        raduis: mag * 5000
-    }).bindPopup('<p align="center"> <b>Date:</b> ${date} <br> <b>Location:</b> ${place} <br> <b>Magnitude:</b> ${mag} </p>').addTo(myMap);
+        radius: mag * 12500
+    }).bindPopup(`<p align="center"> <b>Date:</b> ${date} <br> <b>Location:</b> ${place} <br> <b>Magnitude:</b> ${mag} </p>`).addTo(myMap);
 
     newMarker = L.layer
 
