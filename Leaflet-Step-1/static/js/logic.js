@@ -70,7 +70,9 @@ d3.json(URL).then(function(data){
       }
 
     //   pop-up information
-    var date = data.features[i].properties.time;
+    var time = data.features[i].properties.time;
+    // convert time to datetime
+    var date = new Date(time);
     var place = data.features[i].properties.place;
     var mag = data.features[i].properties.mag;
 
